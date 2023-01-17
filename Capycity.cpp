@@ -86,7 +86,7 @@ void setzeGebaeude() {
 		"\n" << Gebaeudetypen::SOLARPANELE << " = Solarpanele\n" << endl;
 	cin >> art;
 
-	//Überarbeiten!
+	//Überarbeiten!!
 	switch (art) {
 	case 1:
 		cout << "Es wurde " << "ENUM" << " ausgewaehlt." << endl;
