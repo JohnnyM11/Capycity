@@ -58,10 +58,17 @@ int main()
 			zeigeBauplan(aBaubereich);
 			break;
 		case 4:
+			//Programm beenden mit vorheriger Sicherheitsabfrage
 			cout << "Wirklich Beenden? (y/n): ";
 			cin >> sicher;
-			if (sicher == 'y')
+			if (sicher == 'y') {
+				//Freigeben des mehrdimensionalen Arrays "aBaubereich"
+				for (int i = 0; i < laengeBaubereich; i++)
+					delete[] aBaubereich[i];	// Zeilen freigeben
+				delete[] aBaubereich;			// Array mit Zeigern auf Zeilenanfänge freigeben
+				aBaubereich = nullptr;		//delete auf einen nullptr-Zeiger bewirkt nichts und ist unschaedlich (deshalb empfehlenswert)
 				menueAuswahl *= 10;
+			}
 			else
 				system("cls");
 			break;
