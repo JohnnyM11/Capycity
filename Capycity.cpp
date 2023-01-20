@@ -138,6 +138,13 @@ public:
 	// 1 Gebaeude benoetigt 1x Holz, 1x Metall, 2x Kunststoff
 };
 
+// ---------------------------------------------------------------------------
+// Klassen zur Gebaeudeverwaltung
+// setzeGebaeude
+// loescheBereich
+// loescheBereich
+// zeigeBauplan
+// ---------------------------------------------------------------------------
 class CapycitySim
 {
 public:
@@ -309,7 +316,7 @@ public:
 			}
 		}
 	}
-
+	
 	static void zeigeBauplan(int** aBaubereich) {
 		//Ausgeben des aktuellen Bauplans
 		int countLeer = 0;
@@ -388,14 +395,8 @@ public:
 		}
 		cout << endl;
 
-		// Auflistung der gebauten Gebaeude und benoetigte Materialien
-		// Bsp.:
-		// WASS: Holz, Holz, Metall, Kunststoff (EPreis: grundpreis + benMaterialien)
-		// WIND: Holz, Metall, Metall, Kunststoff (EPreis: grundpreis + benMaterialien)
-		// WIND: Holz, Metall, Metall, Kunststoff (EPreis: grundpreis + benMaterialien)
-		// SOLA: Holz, Metall, Kunststoff, Kunststoff (EPreis: grundpreis + benMaterialien)
-		// Gesamtpreis: EPreis * anzGebaeude
 
+		// Auflistung der gebauten Gebaeude, benoetigte Materialien und Preise
 		cout << "### Auflistung der Gebaeude ###" << endl;
 
 		//Daten aus den Klassen/Funktionen holen und in entsprechende Variablen speichern
@@ -418,7 +419,7 @@ public:
 		CKunststoff oKunststoff;
 		double priceKunststoff = oKunststoff.getPrice();
 
-		//Ausgabe der Daten in den Vektoren
+		//Ausgabe der Daten in den Vektoren und Berechnung der Preise
 		cout.precision(2);
 		cout << countLeer << "x Leer" << endl;
 		//Wasserkraftwerke
@@ -484,124 +485,20 @@ public:
 	}
 };
 
-
-
-
-
-
+// ---------------------------------------------------------------------------
+// MAIN
+// ---------------------------------------------------------------------------
 int main()
 {
-	/*
-	//TEST Vector
-	cout << "TEST:" << endl;
-	vector<string> benMaterialien;
-	int gebaeudetyp = 0;
-	int groesse = 0;
-	cout << "eingabe (1-3): ";
-	cin >> gebaeudetyp;
-	cout << "groesse: ";
-	cin >> groesse;
-
-	cout << "Benoetigte Materialien:\n";
-	if (gebaeudetyp == Gebaeudetypen::WASSERKRAFTWERK)
-	{
-		CWasserkraftwerk oWasser;
-		for (int i = 0; i < groesse; i++)
-		{
-			//oWasser.getBenMaterial();
-			benMaterialien = oWasser.getBenMaterial();
-
-		}
-		for (int j = 0; j < oWasser.benMaterial.size(); j++) {
-			if (j == 0)
-				cout << "";
-			else if (j != 0 && j % 4 == 0)
-				cout << "\n";
-			else
-				cout << ", ";
-			if (j == (oWasser.benMaterial.size() - 1))
-				cout << oWasser.benMaterial[j] << "\n";
-			else
-				cout << benMaterialien[j];// << ", ";
-			//cout << oWasser.benMaterial[j] << ", ";
-		}
-		int c = count(benMaterialien.begin(), benMaterialien.end(), "Holz");
-		cout << "\nTestcounter: " << c << endl << endl;
-	}
-	else if (gebaeudetyp == Gebaeudetypen::WINDKRAFTWERK)
-	{
-		CWindkraftwerk oWind;
-		for (int i = 0; i < groesse; i++)
-		{
-			oWind.getBenMaterial();
-		}
-		for (int j = 0; j < oWind.benMaterial.size(); j++) {
-			if (j == (oWind.benMaterial.size() - 1))
-				cout << oWind.benMaterial[j] << "\n";
-			else
-				cout << oWind.benMaterial[j] << ", ";
-		}
-	}
-	else if (gebaeudetyp == Gebaeudetypen::SOLARPANELE)
-	{
-		CSolarpanele oSolar;
-		for (int i = 0; i < groesse; i++)
-		{
-			oSolar.getBenMaterial();
-		}
-		for (int j = 0; j < oSolar.benMaterial.size(); j++) {
-			if (j == (oSolar.benMaterial.size() - 1))
-				cout << oSolar.benMaterial[j] << "\n";
-			else
-				cout << oSolar.benMaterial[j] << ", ";
-		}
-	}
-	else
-		cout << "Falsche Eingabe!" << endl;
-	cout << endl;
-
-
-
-	// TESTENDE
-	//TEST Materialauswahl
-	int matr;
-	cout << "### Materialauswahl ###\n" << Materialien::HOLZ << " = Holz"
-		"\n" << Materialien::METALL << " = Metall"
-		"\n" << Materialien::KUNSTSTOFF << " = Kunststoff"
-		"\nWaehle (0-2): ";
-	cin >> matr;
-	cout << endl;
-	if (matr == Materialien::HOLZ) {
-		CHolz oHolz(Materialien::HOLZ);
-		cout << "1 Kubikmeter " << oHolz.getName() << " kostet: " << oHolz.getPrice() << endl << endl;
-	}
-	else if (matr == Materialien::METALL) {
-		CMetall oMetall(Materialien::METALL);
-		cout << "1 Tonne " << oMetall.getName() << " kostet: " << oMetall.getPrice() << endl << endl;
-	}
-	else if (matr == Materialien::KUNSTSTOFF) {
-		CKunststoff oKunststoff(Materialien::KUNSTSTOFF);
-		cout << "1 Tonne " << oKunststoff.getName() << " kostet: " << oKunststoff.getPrice() << endl << endl;
-	}
-	else {
-		cout << "Falsche Eingabe!\nProgramm wird beendet.." << endl;
-		system("Pause");
-		return 0;
-	}
-	//TESTENDE
-	*/
-
-
-
 	//Deklaration der Variablen
 	int menueAuswahl = 0;	//zur Auswahl im Menue
 	char sicher = 'n';		//fuer die Sicherheitsabfrage, ob wirklich beendet werden soll
 
 	/*	//Deklaration der Funktionen
 	void CapycitySim::setzeGebaeude(int**);		//Nachfrage nach Art, Laenge, Breite und Position
-	void loescheBereich(int**);		//Gebaeude sollen nicht geloescht, sondern nur verkleinert werden
-	void zeigeBauplan(int**);		//Ausgeben des aktuellen Bauplans
-	void beendeProgramm();			//Beenden des Programms		*/
+	void loescheBereich(int**);					//Gebaeude sollen nicht geloescht, sondern nur verkleinert werden
+	void zeigeBauplan(int**);					//Ausgeben des aktuellen Bauplans
+	void beendeProgramm();						//Beenden des Programms		*/
 
 	//Eingabe von Laenge und Breite fuer den Baubereich
 	cout << "Hello Capycity!\n### Definition des Baubereichs ###" << endl;
@@ -609,6 +506,7 @@ int main()
 	cin >> laengeBaubereich;
 	cout << "Breite: ";
 	cin >> breiteBaubereich;
+
 	//Mehrdimensionales Array mit dynamischer Groeße (Laenge x Breite) anlegen
 	int** aBaubereich = new int* [laengeBaubereich];
 	for (int i = 0; i < laengeBaubereich; i++)
