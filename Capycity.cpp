@@ -85,14 +85,22 @@ public:
 class CBuilding {};
 
 class CWasserkraftwerk : public CBuilding {
+	CHolz oHolz;
+	double priceHolz = oHolz.getPrice();
+	CMetall oMetall;
+	double priceMetall = oMetall.getPrice();
+	CKunststoff oKunststoff;
+	double priceKunststoff = oKunststoff.getPrice();
+
 public:
 	double grundpreis;
+	double ePreis;
 	string label;
 	string name;
 	map<int, string> benMaterialMap;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CWasserkraftwerk() : grundpreis(800.0), label("WASS"), name("Wasserkraftwerk") { }
+	CWasserkraftwerk() : grundpreis(800.0), ePreis(0.0), label("WASS"), name("Wasserkraftwerk") { }
 
 	string getLabel() const { return label; }
 	string getName() const { return name; }
@@ -114,17 +122,35 @@ public:
 		benMaterialMap[3] = "Kunststoff";
 		return benMaterialMap;
 	}
+
+	double getEPreis() {
+		ePreis = grundpreis + (2 * oHolz.getPrice()) + oMetall.getPrice() + oKunststoff.getPrice();
+		return ePreis;
+	}
+
+	double getLeistung() {
+		// to be done
+		// return leistung;
+	}
 };
 
 class CWindkraftwerk : public CBuilding {
+	CHolz oHolz;
+	double priceHolz = oHolz.getPrice();
+	CMetall oMetall;
+	double priceMetall = oMetall.getPrice();
+	CKunststoff oKunststoff;
+	double priceKunststoff = oKunststoff.getPrice();
+
 public:
 	double grundpreis;
+	double ePreis;
 	string label;
 	string name;
 	map<int, string> benMaterialMap;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CWindkraftwerk() : grundpreis(900.0), label("WIND"), name("Windkraftwerk") {}
+	CWindkraftwerk() : grundpreis(900.0), ePreis(0.0), label("WIND"), name("Windkraftwerk") {}
 
 	string getLabel() const { return label; }
 	string getName() const { return name; }
@@ -146,17 +172,35 @@ public:
 		benMaterialMap[3] = "Kunststoff";
 		return benMaterialMap;
 	}
+
+	double getEPreis() {
+		ePreis = grundpreis + oHolz.getPrice() + (2 * oMetall.getPrice()) + oKunststoff.getPrice();
+		return ePreis;
+	}
+
+	double getLeistung() {
+		// to be done
+		// return leistung;
+	}
 };
 
 class CSolarpanele : public CBuilding {
+	CHolz oHolz;
+	double priceHolz = oHolz.getPrice();
+	CMetall oMetall;
+	double priceMetall = oMetall.getPrice();
+	CKunststoff oKunststoff;
+	double priceKunststoff = oKunststoff.getPrice();
+
 public:
 	double grundpreis;
+	double ePreis;
 	string label;
 	string name;
 	map<int, string> benMaterialMap;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CSolarpanele() : grundpreis(700.0), label("SOLA"), name("Solarpanele") {}
+	CSolarpanele() : grundpreis(700.0), ePreis(0.0), label("SOLA"), name("Solarpanele") {}
 
 	string getLabel() const { return label; }
 	string getName() const { return name; }
@@ -177,6 +221,16 @@ public:
 		benMaterialMap[2] = "Kunststoff";
 		benMaterialMap[3] = "Kunststoff";
 		return benMaterialMap;
+	}
+
+	double getEPreis() {
+		ePreis = grundpreis + oHolz.getPrice() + oMetall.getPrice() + (2 * oKunststoff.getPrice());
+		return ePreis;
+	}
+
+	double getLeistung() {
+		// to be done
+		// return leistung;
 	}
 };
 
@@ -532,7 +586,7 @@ public:
 					cout << benMatSolar[i] << ", ";
 			}
 		}
-		cout << "\n=== Gesamtpreis aller Gebaeude:\t" << fixed << (countWasser * priceWasser) + (countWind * priceWind) + (countSolar * priceSolar) << " Euro ===" << endl;
+		cout << "\n=== Gesamtpreis aller Gebaeude:\t" << fixed << (countWasser * oWaKw.getEPreis()) + (countWind * oWiKw.getEPreis()) + (countSolar * oSoPn.getEPreis()) << " Euro ===" << endl;
 		cout << endl;
 	}
 };
