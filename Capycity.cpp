@@ -73,6 +73,14 @@ public:
 // ---------------------------------------------------------------------------
 // Klassen fuer Gebaeude
 // 0 = kein Gebaeude, 1 = Wasserkraftwerk, 2 = Windkraftwerk, 3 = Solarpanele
+// Zu Aufgabe aus Kapitel 3: "Gib an für welche Idee du dich entschieden hast und warum."
+// Haette ich mehr Zeit gehabt bzw. frueher angefangen, haette ich mich fuer Carlas Variante entschieden und die Verwaltung innerhalb der Gebaeude implementiert.
+// Leider hab ich das nicht mehr richtig hinbekommen und dann nur eine "abgespeckte" Variante, aber trotzdem mittels Maps, implementiert.
+// 
+// Grund fuer Carlas Variante:
+// Weil ich es uebersichtlicher gefunden haette und die benoetigten Materialien eig. immer gleich sind, wenn es einmal definiert wurde, also weil die
+// Gebaeude ja immer aus den gleichen Materialien gebaut werden und sich das selten aendert.
+// Zudem stimme ich Carla zu, dass man dann irgendwann alle Informationen auslagern koennte/wuerde und somit die Kapselung darunter leidet.
 // ---------------------------------------------------------------------------
 class CBuilding {};
 
@@ -81,13 +89,14 @@ public:
 	double grundpreis;
 	string label;
 	string name;
+	map<int, string> benMaterialMap;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CWasserkraftwerk() : grundpreis(800.0), label("WASS"), name("Wasserkraftwerk") {}
+	CWasserkraftwerk() : grundpreis(800.0), label("WASS"), name("Wasserkraftwerk") { }
 
-	string getLabel() { return label; }
-	string getName() { return name; }
-	double getGrundpreis() { return grundpreis; }
+	string getLabel() const { return label; }
+	string getName() const { return name; }
+	double getGrundpreis() const { return grundpreis; }
 
 	vector<string> getBenMaterial() {
 		// 1 Gebaeude benoetigt 2x Holz, 1x Metall, 1x Kunststoff
@@ -97,20 +106,29 @@ public:
 		benMaterial.push_back("Kunststoff");
 		return benMaterial;
 	}
+
+	map<int, string> getBenMaterialMap() {
+		benMaterialMap[0] = "Holz";
+		benMaterialMap[1] = "Holz";
+		benMaterialMap[2] = "Metall";
+		benMaterialMap[3] = "Kunststoff";
+		return benMaterialMap;
+	}
 };
 
-class CWindkraftwerk : CBuilding {
+class CWindkraftwerk : public CBuilding {
 public:
 	double grundpreis;
 	string label;
 	string name;
+	map<int, string> benMaterialMap;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
 	CWindkraftwerk() : grundpreis(900.0), label("WIND"), name("Windkraftwerk") {}
 
-	string getLabel() { return label; }
-	string getName() { return name; }
-	double getGrundpreis() { return grundpreis; }
+	string getLabel() const { return label; }
+	string getName() const { return name; }
+	double getGrundpreis() const { return grundpreis; }
 
 	vector<string> getBenMaterial() {
 		// 1 Gebaeude benoetigt 1x Holz, 2x Metall, 1x Kunststoff
@@ -120,20 +138,29 @@ public:
 		benMaterial.push_back("Kunststoff");
 		return benMaterial;
 	}
+
+	map<int, string> getBenMaterialMap() {
+		benMaterialMap[0] = "Holz";
+		benMaterialMap[1] = "Metall";
+		benMaterialMap[2] = "Metall";
+		benMaterialMap[3] = "Kunststoff";
+		return benMaterialMap;
+	}
 };
 
-class CSolarpanele : CBuilding {
+class CSolarpanele : public CBuilding {
 public:
 	double grundpreis;
 	string label;
 	string name;
+	map<int, string> benMaterialMap;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
 	CSolarpanele() : grundpreis(700.0), label("SOLA"), name("Solarpanele") {}
 
-	string getLabel() { return label; }
-	string getName() { return name; }
-	double getGrundpreis() { return grundpreis; }
+	string getLabel() const { return label; }
+	string getName() const { return name; }
+	double getGrundpreis() const { return grundpreis; }
 
 	vector<string> getBenMaterial() {
 		// 1 Gebaeude benoetigt 1x Holz, 1x Metall, 2x Kunststoff
@@ -142,6 +169,14 @@ public:
 		benMaterial.push_back("Kunststoff");
 		benMaterial.push_back("Kunststoff");
 		return benMaterial;
+	}
+
+	map<int, string> getBenMaterialMap() {
+		benMaterialMap[0] = "Holz";
+		benMaterialMap[1] = "Metall";
+		benMaterialMap[2] = "Kunststoff";
+		benMaterialMap[3] = "Kunststoff";
+		return benMaterialMap;
 	}
 };
 
@@ -415,15 +450,18 @@ public:
 
 		//Daten aus den Klassen/Funktionen holen und in entsprechende Variablen speichern
 		CWasserkraftwerk oWasser;
-		vector<string> benMatWasser = oWasser.getBenMaterial();
+		map<int, string> benMatWasser = oWasser.getBenMaterialMap();
+		//vector<string> benMatWasser = oWasser.getBenMaterial();
 		double priceWasser = oWasser.getGrundpreis();
 
 		CWindkraftwerk oWind;
-		vector<string> benMatWind = oWind.getBenMaterial();
+		map<int, string> benMatWind = oWind.getBenMaterialMap();
+		//vector<string> benMatWind = oWind.getBenMaterial();
 		double priceWind = oWind.getGrundpreis();
 
 		CSolarpanele oSolar;
-		vector<string> benMatSolar = oSolar.getBenMaterial();
+		map<int, string> benMatSolar = oSolar.getBenMaterialMap();
+		//vector<string> benMatSolar = oSolar.getBenMaterial();
 		double priceSolar = oSolar.getGrundpreis();
 
 		CHolz oHolz;
