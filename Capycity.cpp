@@ -10,12 +10,13 @@ Projekt "Capycity"
 #include <vector>
 #include <algorithm>
 #include <numeric>
+#include <map>
 using namespace std;
 
 int laengeBaubereich;
 int breiteBaubereich;
-enum Gebaeudetypen { LEER, WASSERKRAFTWERK, WINDKRAFTWERK, SOLARPANELE };		//0 = kein Gebaeude, 1 = Wasserkraftwerk, 2 = Windkraftwerk, 3 = Solarpanele
-enum Materialien { HOLZ, METALL, KUNSTSTOFF };									//0 = Holz, 1 = Metall, 2 = Kunststoff
+//enum Gebaeudetypen { LEER, WASSERKRAFTWERK, WINDKRAFTWERK, SOLARPANELE };		//0 = kein Gebaeude, 1 = Wasserkraftwerk, 2 = Windkraftwerk, 3 = Solarpanele
+//enum Materialien { HOLZ, METALL, KUNSTSTOFF };									//0 = Holz, 1 = Metall, 2 = Kunststoff
 
 
 // ---------------------------------------------------------------------------
@@ -79,63 +80,69 @@ class CWasserkraftwerk : public CBuilding {
 public:
 	double grundpreis;
 	string label;
+	string name;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CWasserkraftwerk() : grundpreis(800.0), label("WASS") {}
+	CWasserkraftwerk() : grundpreis(800.0), label("WASS"), name("Wasserkraftwerk") {}
 
 	string getLabel() { return label; }
+	string getName() { return name; }
 	double getGrundpreis() { return grundpreis; }
 
 	vector<string> getBenMaterial() {
+		// 1 Gebaeude benoetigt 2x Holz, 1x Metall, 1x Kunststoff
 		benMaterial.push_back("Holz");
 		benMaterial.push_back("Holz");
 		benMaterial.push_back("Metall");
 		benMaterial.push_back("Kunststoff");
 		return benMaterial;
 	}
-	// 1 Gebaeude benoetigt 2x Holz, 1x Metall, 1x Kunststoff
 };
 
 class CWindkraftwerk : CBuilding {
 public:
 	double grundpreis;
 	string label;
+	string name;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CWindkraftwerk() : grundpreis(900.0), label("WIND") {}
+	CWindkraftwerk() : grundpreis(900.0), label("WIND"), name("Windkraftwerk") {}
 
 	string getLabel() { return label; }
+	string getName() { return name; }
 	double getGrundpreis() { return grundpreis; }
 
 	vector<string> getBenMaterial() {
+		// 1 Gebaeude benoetigt 1x Holz, 2x Metall, 1x Kunststoff
 		benMaterial.push_back("Holz");
 		benMaterial.push_back("Metall");
 		benMaterial.push_back("Metall");
 		benMaterial.push_back("Kunststoff");
 		return benMaterial;
 	}
-	// 1 Gebaeude benoetigt 1x Holz, 2x Metall, 1x Kunststoff
 };
 
 class CSolarpanele : CBuilding {
 public:
 	double grundpreis;
 	string label;
+	string name;
 	vector<string> benMaterial;		//Array bzw. Vektor fuer die benoetigten Materialien
 
-	CSolarpanele() : grundpreis(700.0), label("SOLA") {}
+	CSolarpanele() : grundpreis(700.0), label("SOLA"), name("Solarpanele") {}
 
 	string getLabel() { return label; }
+	string getName() { return name; }
 	double getGrundpreis() { return grundpreis; }
 
 	vector<string> getBenMaterial() {
+		// 1 Gebaeude benoetigt 1x Holz, 1x Metall, 2x Kunststoff
 		benMaterial.push_back("Holz");
 		benMaterial.push_back("Metall");
 		benMaterial.push_back("Kunststoff");
 		benMaterial.push_back("Kunststoff");
 		return benMaterial;
 	}
-	// 1 Gebaeude benoetigt 1x Holz, 1x Metall, 2x Kunststoff
 };
 
 // ---------------------------------------------------------------------------
@@ -155,31 +162,36 @@ public:
 		int laengeObjekt = 0;
 		int breiteObjekt = 0;
 		int gebaeudetyp = 0;
+		CWasserkraftwerk oWaKw;
+		CWindkraftwerk oWiKw;
+		CSolarpanele oSoPn;
+		string getGebaeudeName;
 
 		system("cls");
 
 		//Auswahl des Gebaeudetyps
 		cout << "Waehlen Sie einen Gebaeudetyp:"
-			"\n" << Gebaeudetypen::WASSERKRAFTWERK << " = Wasserkraftwerk"
-			"\n" << Gebaeudetypen::WINDKRAFTWERK << " = Windkraftwerk"
-			"\n" << Gebaeudetypen::SOLARPANELE << " = Solarpanele\n" << endl;
+			"\n" << "1 = " << oWaKw.getName() <<
+			"\n" << "2 = " << oWiKw.getName() <<
+			"\n" << "3 = " << oSoPn.getName() << "\n" << endl;
 		cout << "Eingabe (1-3): ";
 		cin >> gebaeudetyp;
 
 		switch (gebaeudetyp) {
-		case Gebaeudetypen::WASSERKRAFTWERK:
-			cout << "Es wurde ein Wasserkraftwerk ausgewaehlt.\n" << endl;
+		case 1:	//Wasser
+			getGebaeudeName = oWaKw.getName();
 			break;
-		case Gebaeudetypen::WINDKRAFTWERK:
-			cout << "Es wurde ein Windkraftwerk ausgewaehlt.\n" << endl;
+		case 2: //Wind
+			getGebaeudeName = oWiKw.getName();
 			break;
-		case Gebaeudetypen::SOLARPANELE:
-			cout << "Es wurden Solarpanele ausgewaehlt.\n" << endl;
+		case 3: //Solar
+			getGebaeudeName = oSoPn.getName();
 			break;
 		default:
 			cout << "Falsche Eingabe!\n" << endl;
 			return;
 		};
+		cout << "Es wurde ein " << getGebaeudeName << " ausgewaehlt.\n" << endl;
 
 		//Groesse (Laenge und Breite) des Gebaeudes angeben
 		cout << "Wie gross soll das Gebaeude sein: Laenge(1-" << laengeBaubereich << ") x Breite(1-" << breiteBaubereich << ")\n"
@@ -226,13 +238,13 @@ public:
 		int tempX = x;		//zum Speichern des aktuellen x-Wertes, sodass die eig. Koordinate erhalten bleibt
 		int tempY = y;		//zum Speichern des aktuellen y-Wertes, sodass die eig. Koordinate erhalten bleibt
 		for (int i = 0; i < laengeObjekt; i++) {
-			if (aBaubereich[tempX][tempY] != Gebaeudetypen::LEER) {
+			if (aBaubereich[tempX][tempY] != 0) {	//0 = LEER
 				cout << "Zu bauendes Gebaeude wuerde mit einem anderen Gebaeude an Stelle: (" << tempX << "|" << tempY << ") kollidieren.\n"
 					"Daher wird der Vorgang abgebrochen.\n" << endl;
 				return;
 			}
 			for (int j = 0; j < breiteObjekt; j++) {
-				if (aBaubereich[tempX][tempY] != Gebaeudetypen::LEER) {
+				if (aBaubereich[tempX][tempY] != 0) {	//0 = LEER
 					cout << "Zu bauendes Gebaeude wuerde mit einem anderen Gebaeude an Stelle: (" << tempX << "|" << tempY << ") kollidieren.\n"
 						"Daher wird der Vorgang abgebrochen.\n" << endl;
 					return;
@@ -246,7 +258,7 @@ public:
 		//Uebersicht der eingegebenen Daten anzeigen
 		system("cls");
 		cout << "### Uebersicht der Angaben ###" << endl;
-		cout << "Gebaeudeart: " << gebaeudetyp << endl;
+		cout << "Gebaeudeart: " << gebaeudetyp << " (" << getGebaeudeName << ")" << endl;
 		cout << "Groesse: " << laengeObjekt << "x" << breiteObjekt << endl;
 		cout << "KO: (" << x << "|" << y << ")\n" << endl;
 
@@ -265,7 +277,7 @@ public:
 	}
 
 	static void loescheBereich(int** aBaubereich) {
-		//Gebaeude sollen nicht geloescht, sondern nur verkleinert werden
+		//Gebaeude sollen nicht komplett geloescht werden, sondern nur verkleinert werden
 
 		//Bereich auswählen: Nachfrage nach Laenge, Breite und Position
 		int x = 0;				//x-Koordinate
@@ -301,14 +313,14 @@ public:
 				breiteBereich = 1;
 		}
 		if (laengeBereich == 1 && breiteBereich == 1)
-			aBaubereich[x][y] = Gebaeudetypen::LEER;
+			aBaubereich[x][y] = 0;	//0 = LEER
 		else {
 			int tempX = x;		//zum Speichern des aktuellen x-Wertes
 			int tempY = y;		//zum Speichern des aktuellen y-Wertes
 			for (int i = 0; i < laengeBereich; i++) {
-				aBaubereich[tempX][tempY] = Gebaeudetypen::LEER;
+				aBaubereich[tempX][tempY] = 0;	//0 = LEER
 				for (int j = 0; j < breiteBereich; j++) {
-					aBaubereich[tempX][tempY] = Gebaeudetypen::LEER;
+					aBaubereich[tempX][tempY] = 0;	//0 = LEER
 					tempY++;
 				}
 				tempY = y;
@@ -316,20 +328,23 @@ public:
 			}
 		}
 	}
-	
+
 	static void zeigeBauplan(int** aBaubereich) {
 		//Ausgeben des aktuellen Bauplans
 		int countLeer = 0;
 		int countWasser = 0;
 		int countWind = 0;
 		int countSolar = 0;
+		CWasserkraftwerk oWaKw;
+		CWindkraftwerk oWiKw;
+		CSolarpanele oSoPn;
 
 		system("cls");
 		cout << "Die Landflaeche sieht aktuell wie folgt aus:\n"
 			"0 = Leer\n"
-			"1 = Wasserkraftwerk\n"
-			"2 = Windkraftwerk\n"
-			"3 = Solarpanele\n\n";
+			"1 = " << oWaKw.getName() << "\n"
+			"2 = " << oWiKw.getName() << "\n"
+			"3 = " << oSoPn.getName() << "\n\n";
 
 		//Anzeige mit Nummern (kompakter)
 		cout << "    # ";
@@ -374,19 +389,19 @@ public:
 			else
 				cout << "x" << i << " # ";
 			for (int j = 0; j < breiteBaubereich; j++) {
-				if (aBaubereich[i][j] == Gebaeudetypen::LEER) {
+				if (aBaubereich[i][j] == 0) {	//0 = LEER
 					cout << "  -  ";
 					countLeer++;
 				}
-				if (aBaubereich[i][j] == Gebaeudetypen::WASSERKRAFTWERK) {
+				if (aBaubereich[i][j] == 1) {	//1 = WASSERKRAFTWERK
 					cout << CWasserkraftwerk().getLabel() << " ";
 					countWasser++;
 				}
-				if (aBaubereich[i][j] == Gebaeudetypen::WINDKRAFTWERK) {
+				if (aBaubereich[i][j] == 2) {	//2 = WINDKRAFTWERK
 					cout << CWindkraftwerk().getLabel() << " ";
 					countWind++;
 				}
-				if (aBaubereich[i][j] == Gebaeudetypen::SOLARPANELE) {
+				if (aBaubereich[i][j] == 3) {	//3 = SOLARPANELE
 					cout << CSolarpanele().getLabel() << " ";
 					countSolar++;
 				}
@@ -394,7 +409,6 @@ public:
 			cout << "\n";
 		}
 		cout << endl;
-
 
 		// Auflistung der gebauten Gebaeude, benoetigte Materialien und Preise
 		cout << "### Auflistung der Gebaeude ###" << endl;
@@ -424,9 +438,9 @@ public:
 		cout << countLeer << "x Leer" << endl;
 		//Wasserkraftwerke
 		if (countWasser == 0)
-			cout << countWasser << "x Wasserkraftwerk" << endl;
+			cout << countWasser << "x " << oWasser.getName() << endl;
 		else {
-			cout << countWasser << "x Wasserkraftwerk:\t";
+			cout << countWasser << "x " << oWasser.getName() << ":\t";
 			for (int i = 0; i < benMatWasser.size(); i++) {
 				if (benMatWasser[i] == "Holz")
 					priceWasser += priceHolz;
@@ -442,9 +456,9 @@ public:
 		}
 		//Windkraftwerke
 		if (countWind == 0)
-			cout << countWind << "x Windkraftwerk" << endl;
+			cout << countWind << "x " << oWind.getName() << endl;
 		else {
-			cout << countWind << "x Windkraftwerk:\t";
+			cout << countWind << "x " << oWind.getName() << ":\t";
 			for (int i = 0; i < benMatWind.size(); i++) {
 				if (benMatWind[i] == "Holz")
 					priceWind += priceHolz;
@@ -462,9 +476,9 @@ public:
 		}
 		//Solarpanele
 		if (countSolar == 0)
-			cout << countSolar << "x Solarpanele" << endl;
+			cout << countSolar << "x " << oSolar.getName() << endl;
 		else {
-			cout << countSolar << "x Solarpanele:\t\t";
+			cout << countSolar << "x " << oSolar.getName() << ":\t\t";
 			for (int i = 0; i < benMatSolar.size(); i++) {
 				if (benMatSolar[i] == "Holz")
 					priceSolar += priceHolz;
@@ -501,7 +515,7 @@ int main()
 	void beendeProgramm();						//Beenden des Programms		*/
 
 	//Eingabe von Laenge und Breite fuer den Baubereich
-	cout << "Hello Capycity!\n### Definition des Baubereichs ###" << endl;
+	cout << "Hello Capycity!\n### Definition des gesamten Baubereichs ###" << endl;
 	cout << "Laenge: ";
 	cin >> laengeBaubereich;
 	cout << "Breite: ";
@@ -515,7 +529,7 @@ int main()
 	//Array mit Gebaeudetyp "NULL" befuellen
 	for (int i = 0; i < laengeBaubereich; i++)
 		for (int j = 0; j < breiteBaubereich; j++)
-			aBaubereich[i][j] = Gebaeudetypen::LEER;
+			aBaubereich[i][j] = 0;	//0 = LEER
 
 	//Konsoleneintraege loeschen und Willkommensnachricht anzeigen
 	system("cls");
